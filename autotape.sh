@@ -35,20 +35,30 @@ Check_tape()
 TESTTAPE=`mt -f ${DRIVE} status | grep DR_OPEN`
   if [ $? == 0 ]; then
     echo "No tape in drive, aborting"
-    exit 1
+    EXIT_STATE=1
 
   else
     echo "Tape seems to exist"
-    exit 0   
+    EXIT_STATE=0   
   fi
 }
   
 
 ### Main routine ###
 
+# Check and repeat until the tape drive is on
 EXIT_STATE=3
 while [ ${EXIT_STATE} != 0 ]; do
   Check_drive
+    if [ ${EXIT_STATE} != 0 ]; then
+      sleep 20
+    fi
+done
+
+# Check and repeat until a tape is inserted
+EXIT_STATE=3
+while [ ${EXIT_STATE} != 0 ]; do
+  Check_tape
     if [ ${EXIT_STATE} != 0 ]; then
       sleep 20
     fi
