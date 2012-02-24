@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ### Config options ###
-BACKUP_DIRS="/home/jake/Documents/wallpaper"
+BACKUP_DIRS="/home/jake/Documents/wallpapers"
 DRIVE="/dev/st0"
-RECHECK_WAIT=60
+RECHECK_WAIT=30
 MT="/bin/mt"
 TAR="/bin/tar"
 
@@ -12,6 +12,7 @@ TAR="/bin/tar"
 
 Do_backup()
 {
+  sleep 10 # Wait for the tape to get ready...
   echo "Doing backup..."
   ${TAR} -cf ${DRIVE} ${BACKUP_DIRS}
   exit 0
