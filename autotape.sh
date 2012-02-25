@@ -3,7 +3,7 @@
 ### Config options ###
 BACKUP_DIRS="/home/jake/Documents/wallpapers"
 DRIVE="/dev/st0"
-RECHECK_WAIT=30
+RECHECK_WAIT=1200
 MT="/bin/mt"
 TAR="/bin/tar"
 
@@ -12,9 +12,12 @@ TAR="/bin/tar"
 
 Do_backup()
 {
-  sleep 10 # Wait for the tape to get ready...
+  sleep 15 # Wait for the tape to get ready...
   echo "Doing backup..."
   ${TAR} -cf ${DRIVE} ${BACKUP_DIRS}
+  echo "Backup done!"
+  sleep 120 #Just in case wait for the tape drive
+  ${MT} -f ${DRIVE} offline
   exit 0
 }
 
@@ -42,7 +45,7 @@ TESTTAPE=`${MT} -f ${DRIVE} status | grep DR_OPEN`
     EXIT_STATE=1
 
   else
-    echo "Tape seems to be in drive, contiuing"
+    echo "Tape seems to be in the drive, contiuing"
     EXIT_STATE=0   
   fi
 }
@@ -66,7 +69,7 @@ fi
 # Check if the utils/programs exists
 Check_utils
 
-# Check and repeat until the tape drive is on
+# Check and repeat until the tape drive is on/connected
 EXIT_STATE=3
 while [ ${EXIT_STATE} != 0 ]; do
   Check_drive
