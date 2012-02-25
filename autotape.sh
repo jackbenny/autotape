@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### Config options ###
-BACKUP_DIRS="/home/jake/Documents/wallpapers"
+BACKUP_DIRS="/mnt/raid1/backups/weekly"
 DRIVE="/dev/st0"
 RECHECK_WAIT=1200
 MT="/bin/mt"
@@ -62,12 +62,25 @@ if [ ! -x ${TAR} ]; then
   exit 1
 fi
 }
+
+Check_backupdir()
+{
+for dirtest in ${BACKUP_DIRS}; do
+  if [ ! -d $dirtest ]; then
+  echo "${dirtest} does not exist" >&2
+  exit 1
+  fi
+done
+}
   
 
 ### Main routine ###
 
 # Check if the utils/programs exists
 Check_utils
+
+# Check if the dirs we want to backup exists
+Check_backupdir
 
 # Check and repeat until the tape drive is on/connected
 EXIT_STATE=3
@@ -87,5 +100,6 @@ while [ ${EXIT_STATE} != 0 ]; do
     fi
 done
 
+# Finally, begin with the backup!
 Do_backup
 
