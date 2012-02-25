@@ -28,7 +28,7 @@ Check_drive()
     EXIT_STATE=1
 
   elif [ -e ${DRIVE} ]; then   
-       echo "Drive connected, contiuing"
+       echo "Drive connected, continuing"
     EXIT_STATE=0 
   
   else
@@ -45,7 +45,7 @@ TESTTAPE=`${MT} -f ${DRIVE} status | grep DR_OPEN`
     EXIT_STATE=1
 
   else
-    echo "Tape seems to be in the drive, contiuing"
+    echo "Tape seems to be in the drive, continuing"
     EXIT_STATE=0   
   fi
 }
