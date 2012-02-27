@@ -1,5 +1,36 @@
 #!/bin/bash
 
+################################################################################
+#                                                                              #
+#  Copyright (C) 2012 Jack-Benny Persson <jack-benny@cyberinfo.se>             #
+#                                                                              #
+#   This program is free software; you can redistribute it and/or modify       #
+#   it under the terms of the GNU General Public License as published by       #
+#   the Free Software Foundation; either version 2 of the License, or          #
+#   (at your option) any later version.                                        #
+#                                                                              #
+#   This program is distributed in the hope that it will be useful,            #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of             #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the              #
+#   GNU General Public License for more details.                               #
+#                                                                              #
+#   You should have received a copy of the GNU General Public License          #
+#   along with this program; if not, write to the Free Software                #
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA  #
+#                                                                              #
+################################################################################
+
+###############################################################################
+#                                                                             #
+# A simple tape backup script to be run in a cronjob. The script check if     #
+# there is a tapedrive connected to the machine, if it has a tape inserted    #
+# and if one if these fails, it will recheck over and over again until both a #
+# tape and a tapedrive is present.                                            #
+# See the README for more information!                                        #
+#                                                                             #
+###############################################################################
+
+
 ### Config options ###
 INCREMENTAL="yes" # yes/no (yes for incremental backup, no for full backup)
 BACKUP_DIRS="/mnt/raid1/backups/weekly"
