@@ -1,20 +1,35 @@
 #!/bin/bash
 
 ### Config options ###
+INCREMENTAL="yes" # yes/no (yes for incremental backup, no for full backup)
 BACKUP_DIRS="/mnt/raid1/backups/weekly"
 DRIVE="/dev/st0"
+SNAPSHOT="/mnt/raid1/backups/weekly.snar" # If using incremental backups
 RECHECK_WAIT=1200
 MT="/bin/mt"
 TAR="/bin/tar"
+CP="/bin/cp"
 
 
 ### Functions ###
 
-Do_backup()
+Do_full_backup()
 {
   sleep 15 # Wait for the tape to get ready...
   echo "Doing backup..."
   ${TAR} -cf ${DRIVE} ${BACKUP_DIRS}
+  echo "Backup done!"
+  sleep 120 #Just in case wait for the tape drive
+  ${MT} -f ${DRIVE} offline
+  exit 0
+}
+
+Do_inc_backup()
+{
+  ${CP} ${SNAPSHOT} ${SNAPSHOT}\-1
+  sleep 15 # Wait for the tape to get ready...
+  echo "Doing backup..."
+  ${TAR} -cf ${DRIVE} -g ${SNAPSHOT}\-1 ${BACKUP_DIRS}
   echo "Backup done!"
   sleep 120 #Just in case wait for the tape drive
   ${MT} -f ${DRIVE} offline
@@ -72,6 +87,14 @@ for dirtest in ${BACKUP_DIRS}; do
   fi
 done
 }
+
+Check_snapshot()
+{
+if [ ! -e ${SNAPSHOT} ]; then
+  echo "${SNAPSHOT} does not exist" >&2
+  exit 1
+fi
+}
   
 
 ### Main routine ###
@@ -81,6 +104,11 @@ Check_utils
 
 # Check if the dirs we want to backup exists
 Check_backupdir
+
+# Check if the snapshot file exist (if running incremental backup)
+if [ ${INCREMENTAL} == "yes" ]; then
+Check_snapshot
+fi
 
 # Check and repeat until the tape drive is on/connected
 EXIT_STATE=3
@@ -101,5 +129,14 @@ while [ ${EXIT_STATE} != 0 ]; do
 done
 
 # Finally, begin with the backup!
-Do_backup
+if [ ${INCREMENTAL} == "yes" ]; then
+  Do_inc_backup
+
+  elif [ ${INCREMENTAL} == "no" ]; then
+      Do_full_backup
+
+  else
+      echo "I don't know what to do, enter yes or no in $INCREMENTAL" >&2
+      exit 1
+fi
 
