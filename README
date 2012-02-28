@@ -1,0 +1,44 @@
+autotape.sh
+
+INTRODUCTION
+
+This is a small script to automate tape backups. More specifically, check for
+the presence of a tape drive and a tape before running the actual backup.
+If the tape or tapedrive is not found on the system, the script will recheck
+in a predefind period of time.
+This is particualary useful for systems wich runs periodic backups through cron
+but dosen't have a fixed tape drive (for example a USB tape drive which gets
+moved along other systems as well). It's also useful for checking the presence
+of a tape before beginning the actual backup. This way you don't have to 
+remember to put a tape in the drive at an exact time. If you forget it, the 
+script will retry until a tape (or tape drive) is inserted. Then it will run 
+the backup.
+
+
+HISTORY
+
+This solution came to mind when I bought a used tape drive of eBay to backup
+my server. The downside was it was really noisy and since I keep that server
+in my appartment I had to turn it off between backups. And then of course I
+forgot to turn it on in time for the cron job. But with this script it dosen't
+matter, I can turn on the tape drive hours later, and the backup will run.
+
+
+FEATURES
+
+The script can handle both full backups aswell as incremental backup.
+NOTE: When using incremental backups you have to run the first full backup
+(tar) maunally to create the snapshot file. But after the first full backup and
+snapshot file is done, the script can run the incremental backups.
+See the tar manual for more information on incremental backups.
+
+
+CONTRIBUTING
+
+Bug reports, feature requests, code etc is always welcome. All contributions
+will be thanked in a THANKS file.
+
+
+Jack-Benny Persson
+jack-benny@cyberinfo.se
+

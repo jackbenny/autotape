@@ -30,6 +30,8 @@
 #                                                                             #
 ###############################################################################
 
+VERSION="Version 1.0"
+AUTHOR="(c) 2012 Jack-Benny Persson (jack-benny@cyberinfo.se)"
 
 ### Config options ###
 INCREMENTAL="yes" # yes/no (yes for incremental backup, no for full backup)
